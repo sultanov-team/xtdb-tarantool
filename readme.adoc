@@ -1,1 +1,29 @@
 == xtdb-tarantool
+
+XTDB module allows you to use Tarantool (in-memory computing platform).
+
+**Status: ** Alpha.
+The design and prototyping stage.
+
+=== Installation
+
+Add the following dependency in your project:
+
+[source,clojure]
+----
+;; project.clj or build.boot
+[team.sultanov/xtdb-tarantool "RELEASE"]
+
+;; deps.edn
+team.sultanov/xtdb-tarantool {:mvn/version "RELEASE"}
+----
+
+=== Roadmap
+
+- [ ] Add tx-log
+- [ ] Add kv-store
+- [ ] Add document-store
+
+=== License
+
+Copyright © 2021 sultanov.team
