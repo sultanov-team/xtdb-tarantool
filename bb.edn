@@ -1,0 +1,124 @@
+{:min-bb-version
+ "0.6.7"
+
+ :tasks
+ {:requires        ([babashka.fs :as fs]
+                    [babashka.process :as process]
+                    [clojure.string :as str]
+                    [clojure.pprint :as pprint])
+
+  :init            (do
+                     (defn get-env [s]
+                       (System/getenv s))
+
+                     (defn get-property [s]
+                       (System/getProperty s))
+
+                     (defn pretty-print [x]
+                       (binding [pprint/*print-right-margin* 130]
+                         (pprint/pprint x)))
+
+                     (defn execute [command]
+                       (-> command (process/tokenize) (process/process) :out slurp str/trim-newline))
+
+                     (def -zone-id (java.time.ZoneId/of "UTC"))
+                     (def -datetime-formatter java.time.format.DateTimeFormatter/ISO_OFFSET_DATE_TIME)
+                     (def -current-timestamp (java.time.ZonedDateTime/now -zone-id))
+                     (def -build-timestamp (str (.format -current-timestamp -datetime-formatter)))
+                     (def -build-number (execute "git rev-list HEAD --count"))
+                     (def -git-url (execute "git config --get remote.origin.url"))
+                     (def -git-branch (execute "git rev-parse --abbrev-ref HEAD"))
+                     (def -git-sha (execute "git rev-parse --short HEAD"))
+
+                     (def -release? (= "master" -git-branch))
+                     (def -snapshot? (not -release?))
+                     (def -deployable? (contains? #{"master" "develop"} -git-branch))
+
+                     (def -version-template (execute "cat version.tmpl"))
+                     (def -version (cond-> (str/replace -version-template "{{build-number}}" -build-number)
+                                     -snapshot? (str "-SNAPSHOT")))
+
+                     (def -config
+                       {:version         -version
+                        :build-number    -build-number
+                        :build-timestamp -build-timestamp
+                        :git-url         -git-url
+                        :git-branch      -git-branch
+                        :git-sha         -git-sha})
+
+                     (def extra-env
+                       {})
+
+                     (defn as-params [params]
+                       (->> params
+                         (seq)
+                         (flatten)
+                         (map (fn [x]
+                                (str/replace (pr-str x) (java.util.regex.Pattern/compile "(\".+\")") "'$1'")))
+                         (str/join \space)))
+
+                     (defn with-params [command]
+                       (->> -config
+                         (as-params)
+                         (str command " "))))
+
+  :enter           (let [{:keys [doc print-doc?]
+                          :or   {print-doc? true}} (current-task)]
+                     (when (and print-doc? doc)
+                       (println (str "▸ " doc))))
+
+  ;;;;
+  ;; Tasks
+  ;;;;
+
+  version          {:doc        "[xtdb-tarantool] Show version"
+                    :print-doc? false
+                    :task       (print -version)}
+
+
+  config           {:doc        "[xtdb-tarantool] Show config"
+                    :print-doc? false
+                    :task       (pretty-print -config)}
+
+  outdated         {:doc  "[xtdb-tarantool] Check for outdated dependencies"
+                    :task (clojure (with-params "-T:build outdated"))}
+
+  outdated:upgrade {:doc  "[xtdb-tarantool] Upgrade outdated dependencies"
+                    :task (clojure (with-params "-T:build outdated:upgrade"))}
+
+  clean            {:doc  "[xtdb-tarantool] Cleanup"
+                    :task (clojure (with-params "-T:build clean"))}
+
+  lint             {:doc  "[xtdb-tarantool] Run linters"
+                    :task (do
+                            (shell "cljstyle check src")
+                            (shell "clj-kondo --lint src"))}
+
+  lint:fix         {:doc  "[xtdb-tarantool] Run linters & fix"
+                    :task (shell "cljstyle fix src")}
+
+  repl             {:doc     "[xtdb-tarantool] Run REPL"
+                    :depends [clean]
+                    :task    (shell {:extra-env extra-env} (with-params "clojure -T:build repl"))}
+
+  test             {:doc     "[xtdb-tarantool] Run tests"
+                    :depends [clean]
+                    :task    (shell {:extra-env extra-env} (with-params "clojure -T:build test"))}
+
+  jar              {:doc     "[xtdb-tarantool] Run build jar"
+                    :depends [clean]
+                    :task    (clojure (with-params "-T:build jar"))}
+
+  install          {:doc  "[xtdb-tarantool] Install the jar locally"
+                    :task (clojure (with-params "-T:build install"))}
+
+  deploy           {:doc  "[xtdb-tarantool] Deploy the jar to clojars"
+                    :task (if -deployable?
+                            (clojure (with-params "-T:build deploy"))
+                            (println "Skip deploy..."))}
+
+  up               {:doc  "[xtdb-tarantool] Start development environment"
+                    :task (shell {:extra-env extra-env} "docker compose up")}
+
+  down             {:doc  "[xtdb-tarantool] Shutdown development environment"
+                    :task (shell {:extra-env extra-env} "docker compose down")}}}
