@@ -16,6 +16,10 @@
                                             lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}}
                               :main-opts   ["--main" "kaocha.runner"]}
 
+           :test/unit        {:main-opts ["--main" "kaocha.runner" "--focus" "unit"]}
+
+           :test/integration {:main-opts ["--main" "kaocha.runner" "--focus" "integration"]}
+
            :build            {:extra-paths ["."]
                               :extra-deps  {io.github.seancorfield/build-clj {:git/tag "v0.5.5" :git/sha "0527130"}}
                               :ns-default  build}

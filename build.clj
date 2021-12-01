@@ -97,6 +97,20 @@
     (bb/run-task opts [:test])))
 
 
+(defn test:unit
+  [opts]
+  (let [opts (with-defaults opts)]
+    (write-meta opts)
+    (bb/run-task opts [:test :test/unit])))
+
+
+(defn test:integration
+  [opts]
+  (let [opts (with-defaults opts)]
+    (write-meta opts)
+    (bb/run-task opts [:test :test/integration])))
+
+
 
 (defn jar
   [opts]

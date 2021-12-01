@@ -105,6 +105,14 @@
                     :depends [clean]
                     :task    (shell {:extra-env extra-env} (with-params "clojure -T:build test"))}
 
+  test:unit        {:doc     "[xtdb-tarantool] Run unit tests"
+                    :depends [clean]
+                    :task    (shell {:extra-env extra-env} (with-params "clojure -T:build test:unit"))}
+
+  test:integration {:doc     "[xtdb-tarantool] Run integration tests"
+                    :depends [clean]
+                    :task    (shell {:extra-env extra-env} (with-params "clojure -T:build test:integration"))}
+
   jar              {:doc     "[xtdb-tarantool] Run build jar"
                     :depends [clean]
                     :task    (clojure (with-params "-T:build jar"))}

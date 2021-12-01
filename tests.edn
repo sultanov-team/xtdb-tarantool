@@ -16,9 +16,14 @@
                                           :kaocha.plugin/randomize
                                           :kaocha.plugin.alpha/info]
 
-     :tests                              [{:id           :unit-clj
+     :tests                              [{:id           :unit
                                            :source-paths ["src/main/clojure"]
-                                           :test-paths   ["src/test/clojure"]}]
+                                           :test-paths   ["src/test/clojure"]
+                                           :focus-meta   [:unit]}
+                                          {:id           :integration
+                                           :source-paths ["src/main/clojure"]
+                                           :test-paths   ["src/test/clojure"]
+                                           :focus-meta   [:integration]}]
 
      :cloverage/opts                     {:output           "coverage"
                                           :ns-regex         []
