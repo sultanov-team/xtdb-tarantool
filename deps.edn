@@ -12,10 +12,8 @@
                               :main-opts   ["--main" "nrepl.cmdline"]}
 
            :test             {:extra-paths ["src/test/clojure" "src/test/resources"]
-                              :extra-deps  {lambdaisland/kaocha                        {:mvn/version "1.60.945"}
-                                            lambdaisland/kaocha-cloverage              {:mvn/version "1.0.75"}
-                                            io.tarantool/testcontainers-java-tarantool {:mvn/version "0.4.6"}
-                                            clj-test-containers/clj-test-containers    {:mvn/version "0.5.0"}}
+                              :extra-deps  {lambdaisland/kaocha           {:mvn/version "1.60.945"}
+                                            lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}}
                               :main-opts   ["--main" "kaocha.runner"]}
 
            :build            {:extra-paths ["."]
