@@ -18,12 +18,12 @@ function validator.is_some(x)
   return x ~= nil
 end
 
-function validator.is_string(str)
-  return type(str) == 'string'
+function validator.is_string(x)
+  return type(x) == 'string'
 end
 
-function validator.not_blank_string(str)
-  return validator.is_string(str) and str ~= ''
+function validator.not_blank_string(x)
+  return validator.is_string(x) and x ~= ''
 end
 
 function validator.is_number(x)
@@ -34,8 +34,8 @@ function validator.is_pos(x)
   return validator.is_number(x) and x >= 0
 end
 
-function validator.is_table(tbl)
-  return type(tbl) == 'table'
+function validator.is_table(x)
+  return type(x) == 'table'
 end
 
 function validator.validate(config)
