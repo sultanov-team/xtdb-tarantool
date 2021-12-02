@@ -9,7 +9,7 @@ services:
     environment:
       - TARANTOOL_USER_NAME=root
       - TARANTOOL_USER_PASSWORD=root
-    command: tarantool /opt/tarantool/server.lua
+    command: tarantool /opt/tarantool/xtdb.lua
     networks:
       - net
     ports:
