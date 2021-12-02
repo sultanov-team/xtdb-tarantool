@@ -34,7 +34,7 @@ function tx_log.model(config)
 
 
   --
-  -- Helpers functions
+  -- Helper functions
   --
 
   function model.get_space()

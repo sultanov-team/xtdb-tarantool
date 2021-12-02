@@ -46,6 +46,7 @@ function xtdb.setup(config)
   end
 
   return api
+
 end
 
 return xtdb

@@ -60,6 +60,7 @@ function validator.validate(config)
   end
 
   return config
+
 end
 
 return validator

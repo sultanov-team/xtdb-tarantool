@@ -11,7 +11,7 @@ function db.configure(config)
       --
       -- tx_log
       --
-      
+
       box.schema.sequence.create(tx_log.EVENT_OFFSET_INDEX_SEQ, {
         start = 1,
         min = 1,
@@ -39,11 +39,12 @@ function db.configure(config)
     end)
   end
 
-  function api.truncate_spaces()
+  function api.truncate_db()
     tx_log.get_space():truncate()
   end
 
   return api
+
 end
 
 return db
