@@ -41,14 +41,14 @@ end
 function validator.validate(config)
   if not validator.is_table(config) then
     config = {}
-    log.warn('Config is not a table. Use the defaults values instead.')
+    log.warn('Config is invalid. The config must be a table. The default values will be applied.')
   end
 
   for param_name, default_value in pairs(config_default_values) do
     param_value = config[param_name]
     if validator.is_nil(param_value) or not validator.is_pos(param_value) then
       config[param_name] = default_value
-      log.warn('Use %s for %s', default_value, param_name)
+      log.warn('Apply %s for %s', default_value, param_name)
     end
   end
 
