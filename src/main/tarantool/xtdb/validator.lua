@@ -26,8 +26,12 @@ function validator.not_blank_string(str)
   return validator.is_string(str) and str ~= ''
 end
 
-function validator.is_pos(number)
-  return type(number) == 'number' and number >= 0
+function validator.is_number(x)
+  return type(x) == 'number'
+end
+
+function validator.is_pos(x)
+  return validator.is_number(x) and x >= 0
 end
 
 function validator.is_table(tbl)
