@@ -12,7 +12,7 @@ function db.configure(config)
       -- tx_log
       --
 
-      box.schema.sequence.create(tx_log.EVENT_OFFSET_INDEX_SEQ, {
+      box.schema.sequence.create(tx_log.TX_ID_INDEX_SEQ, {
         start = 1,
         min = 1,
         step = 1,
@@ -24,15 +24,14 @@ function db.configure(config)
       })
 
       tx_log_space:format({
-        { name = tx_log.EVENT_OFFSET_FIELD, type = 'unsigned' },
+        { name = tx_log.TX_ID_FIELD, type = 'unsigned' },
         { name = tx_log.TX_TIME_FIELD, type = 'unsigned' },
-        { name = tx_log.V_FIELD, type = 'string' },
-        { name = tx_log.COMPACTED_FIELD, type = 'unsigned' },
+        { name = tx_log.TX_EVENTS_FIELD, type = 'string' } -- FIXME: change to binary
       })
 
-      tx_log_space:create_index(tx_log.EVENT_OFFSET_INDEX, {
-        parts = { tx_log.EVENT_OFFSET_FIELD },
-        sequence = tx_log.EVENT_OFFSET_INDEX_SEQ,
+      tx_log_space:create_index(tx_log.TX_ID_INDEX, {
+        parts = { tx_log.TX_ID_FIELD },
+        sequence = tx_log.TX_ID_INDEX_SEQ,
         if_not_exists = true
       })
 

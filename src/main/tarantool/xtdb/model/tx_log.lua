@@ -14,22 +14,20 @@ function tx_log.model(config)
   model.SPACE_NAME = config.spaces.tx_log.name
 
   -- field order
-  model.EVENT_OFFSET = 1
+  model.TX_ID = 1
   model.TX_TIME = 2
-  model.V = 3
-  model.COMPACTED = 4
+  model.TX_EVENTS = 3
 
   -- field names
-  model.EVENT_OFFSET_FIELD = 'event_offset'
+  model.TX_ID_FIELD = 'tx_id'
   model.TX_TIME_FIELD = 'tx_time'
-  model.V_FIELD = 'v'
-  model.COMPACTED_FIELD = 'compacted'
+  model.TX_EVENTS_FIELD = 'tx_events'
 
   -- sequences
-  model.EVENT_OFFSET_INDEX_SEQ = model.SPACE_NAME .. '_event_offset_index_seq'
+  model.TX_ID_INDEX_SEQ = model.SPACE_NAME .. '_tx_id_index_seq'
 
   -- indexes
-  model.EVENT_OFFSET_INDEX = model.SPACE_NAME .. '_event_offset_index'
+  model.TX_ID_INDEX = model.SPACE_NAME .. '_tx_id_index'
 
 
 
@@ -43,10 +41,9 @@ function tx_log.model(config)
 
   function model.serialize(tuple, data)
     local res = {
-      event_offset = tuple[model.EVENT_OFFSET],
+      tx_id = tuple[model.TX_ID],
       tx_time = tuple[model.TX_TIME],
-      v = tuple[model.V],
-      compacted = tuple[model.COMPACTED]
+      tx_events = tuple[model.TX_EVENTS]
     }
 
     if validator.is_some(data) then
@@ -64,12 +61,11 @@ function tx_log.model(config)
   -- API
   --
 
-  function model.submit_tx(events)
+  function model.submit_tx(tx_events)
     return model.get_space():insert({
-      [model.EVENT_OFFSET] = nil,
+      [model.TX_ID] = nil,
       [model.TX_TIME] = utils.now(),
-      [model.V] = events,
-      [model.COMPACTED] = 0
+      [model.TX_EVENTS] = tx_events
     })
   end
 
