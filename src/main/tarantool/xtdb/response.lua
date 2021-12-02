@@ -1,14 +1,43 @@
 local response = {}
 
-local error = require('xtdb.error')
+-- success responses
 
-function response.error(code)
-  local message = { [code] = error.CODES[code] }
-  return false, message
+response.OK = 200
+response.CREATED = 201
+
+
+
+-- error responses
+response.BAD_REQUEST = 400
+
+
+
+-- response codes
+response.CODES = {
+
+  -- success responses
+  [response.OK] = 'Success',
+  [response.CREATED] = 'Created',
+
+
+  -- error responses
+  [response.BAD_REQUEST] = 'Bad request'
+
+}
+
+function response.failure(code)
+  return {
+    status = code,
+    payload = { message = response.CODES[code] } -- TODO: add error data to the response?
+  }
 end
 
-function response.ok(data)
-  return true, data
+function response.success(code, data)
+  return {
+    status = code,
+    payload = { message = response.CODES[code],
+                data = data }
+  }
 end
 
 return response
