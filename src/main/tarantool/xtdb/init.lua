@@ -46,6 +46,34 @@ function xtdb.setup(config)
     return response.failure(response.BAD_REQUEST)
   end
 
+  function api.tx_log_open_tx_log(after_tx_id)
+    -- if after_tx_id is not valid
+    if validator.is_some(after_tx_id) and not validator.is_pos(after_tx_id) then
+      log.warn("[tx_log] open_tx_log: bad request - %s", utils.to_json(after_tx_id))
+      return response.failure(response.BAD_REQUEST)
+    end
+
+    -- if after_tx_id is nil
+    if validator.is_nil(after_tx_id) then
+      log.warn("[tx_log] open_tx_log: apply `0` for `after_tx_id` instead of `%s`", utils.to_json(after_tx_id))
+      after_tx_id = 0
+    end
+
+    -- get tx_log
+    local coll = tx_log.open_tx_log(after_tx_id)
+
+    -- if tx_log is empty
+    if validator.is_empty(coll) then
+      log.info("[tx_log] open_tx_log: not found - %s", utils.to_json(coll))
+      return response.failure(response.NOT_FOUND)
+    end
+
+    -- if tx_log is not empty
+    log.info("[tx_log] open_tx_log: %s", utils.to_json(coll))
+    local res = utils.map(tx_log.serialize, coll)
+    return response.success(response.OK, res)
+  end
+
   function api.tx_log_latest_submitted_tx()
     local res = tx_log.latest_submitted_tx()
 
