@@ -18,4 +18,12 @@ function utils.try(f, catch_f)
   end
 end
 
+function utils.map(f, coll)
+  local res = {}
+  for idx, x in pairs(coll) do
+    res[idx] = f(x)
+  end
+  return res
+end
+
 return utils
