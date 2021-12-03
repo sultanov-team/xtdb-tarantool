@@ -27,18 +27,19 @@ response.CODES = {
 
 }
 
-function response.failure(code)
+function response.failure(code, error)
   return {
     status = code,
-    payload = { message = response.CODES[code] } -- TODO: add error data to the response?
+    message = response.CODES[code],
+    error = error
   }
 end
 
 function response.success(code, data)
   return {
     status = code,
-    payload = { message = response.CODES[code],
-                data = data }
+    message = response.CODES[code],
+    data = data
   }
 end
 
