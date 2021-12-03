@@ -33,25 +33,31 @@ function xtdb.setup(config)
   --
 
   function api.tx_log_submit_tx(tx_events)
+    -- if tx_events is valid
     if validator.not_blank_string(tx_events) then
+      -- FIXME: change to binary
       local res = tx_log.submit_tx(tx_events)
       log.info("[tx_log] submit_tx: %s", utils.to_json(res))
       return response.success(response.CREATED, tx_log.serialize(res))
-    else
-      log.warn("[tx_log] submit_tx: bad request - %s", tx_events)
-      return response.failure(response.BAD_REQUEST)
     end
+
+    -- if tx_events is not valid
+    log.warn("[tx_log] submit_tx: bad request - %s", tx_events)
+    return response.failure(response.BAD_REQUEST)
   end
 
   function api.tx_log_latest_submitted_tx()
     local res = tx_log.latest_submitted_tx()
+
+    -- if tx_log is not empty
     if validator.is_some(res) then
       log.info("[tx_log] latest_submitted_tx: %s", utils.to_json(res))
       return response.success(response.OK, tx_log.serialize(res))
-    else
-      log.info("[tx_log] latest_submitted_tx: not found - %s", utils.to_json(res))
-      return response.failure(response.NOT_FOUND)
     end
+
+    -- if tx_log is empty
+    log.warn("[tx_log] latest_submitted_tx: not found - %s", utils.to_json(res))
+    return response.failure(response.NOT_FOUND)
   end
 
   return api
