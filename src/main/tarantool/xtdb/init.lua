@@ -9,6 +9,7 @@ local validator = require('xtdb.validator')
 
 function xtdb.setup(config)
   local api = {
+    db = {},
     tx_log = {}
   }
 
@@ -33,6 +34,15 @@ function xtdb.setup(config)
   --
   -- API methods
   --
+
+  --
+  -- [db] truncate
+  --
+  function api.db.truncate()
+    db.configure(config).truncate_db()
+  end
+
+
 
   --
   -- [tx_log] submit_tx
