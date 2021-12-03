@@ -41,10 +41,13 @@ function xtdb.setup(config)
   function api.tx_log.submit_tx(tx_events)
     -- if tx_events is valid
     if validator.not_blank_string(tx_events) then
-      -- FIXME: change to binary
-      local res = tx_log.submit_tx(tx_events)
+      local tx = tx_log.submit_tx(tx_events)
+      local res = {
+        tx_id = tx[tx_log.TX_ID],
+        tx_time = tx[tx_log.TX_TIME]
+      }
       log.info("[tx_log.submit_tx]: `tx`=%s", utils.to_json(res))
-      return response.success(response.CREATED, tx_log.serialize(res))
+      return response.success(response.CREATED, res)
     end
 
     -- if tx_events is not valid
@@ -71,18 +74,24 @@ function xtdb.setup(config)
       after_tx_id = 0
     end
 
-    -- get tx_log
-    local coll = tx_log.open_tx_log(after_tx_id)
+    -- get txs
+    local txs = tx_log.open_tx_log(after_tx_id)
 
     -- if tx_log is empty
-    if validator.is_empty(coll) then
-      log.error("[tx_log.open_tx_log]: `after_tx_id`=%s, `tx_log`=[]", after_tx_id)
+    if validator.is_empty(txs) then
+      log.error("[tx_log.open_tx_log]: `after_tx_id`=%s, `txs`=[]", after_tx_id)
       return response.failure(response.NOT_FOUND)
     end
 
     -- if tx_log is not empty
-    log.info("[tx_log.open_tx_log]: `after_tx_id`=%s, `tx_log`=%s", after_tx_id, utils.to_json(coll))
-    local res = utils.map(tx_log.serialize, coll)
+    local res = utils.map(function(tx)
+      return {
+        tx_id = tx[tx_log.TX_ID],
+        tx_time = tx[tx_log.TX_TIME],
+        tx_events = tx[tx_log.TX_EVENTS]
+      }
+    end, txs)
+    log.info("[tx_log.open_tx_log]: `after_tx_id`=%s, `txs`=%s", after_tx_id, utils.to_json(res))
     return response.success(response.OK, res)
   end
 
@@ -93,16 +102,19 @@ function xtdb.setup(config)
   --
 
   function api.tx_log.latest_submitted_tx()
-    local res = tx_log.latest_submitted_tx()
+    local tx = tx_log.latest_submitted_tx()
 
-    -- if tx_log is not empty
-    if validator.is_some(res) then
-      log.info("[tx_log.latest_submitted_tx]: `tx_id`=%s", utils.to_json(res))
-      return response.success(response.OK, tx_log.serialize(res))
+    -- if tx is not nil
+    if validator.is_some(tx) then
+      local res = {
+        tx_id = tx[tx_log.TX_ID]
+      }
+      log.info("[tx_log.latest_submitted_tx]: `tx`=%s", utils.to_json(res))
+      return response.success(response.OK, res)
     end
 
-    -- if tx_log is empty
-    log.error("[tx_log.latest_submitted_tx]: `tx_id`=nil")
+    -- if tx is nil
+    log.error("[tx_log.latest_submitted_tx]: `tx`=nil")
     return response.failure(response.NOT_FOUND)
   end
 
