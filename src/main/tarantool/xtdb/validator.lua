@@ -38,6 +38,10 @@ function validator.is_table(x)
   return type(x) == 'table'
 end
 
+function validator.is_empty(x)
+  return validator.is_nil(next(x))
+end
+
 function validator.validate(config)
   if not validator.is_table(config) then
     config = {}
