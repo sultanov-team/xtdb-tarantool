@@ -55,15 +55,11 @@ function tx_log.model(config)
   end
 
   function model.open_tx_log(after_tx_id)
-    return model.get_space():select({ [model.TX_ID] = after_tx_id }, 'GT') -- FIXME: add limits?
+    return model.get_space():select({ [model.TX_ID] = after_tx_id }, 'GT') -- TODO: add limits?
   end
 
   function model.latest_submitted_tx()
-    local res
-    utils.try(function()
-      res = { [model.TX_ID] = box.sequence[model.TX_ID_INDEX_SEQ]:current() }
-    end)
-    return res
+    return model.get_space().index[model.TX_ID_INDEX]:max()
   end
 
   return model
