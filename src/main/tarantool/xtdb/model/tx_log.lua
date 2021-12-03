@@ -39,21 +39,6 @@ function tx_log.model(config)
     return box.space[model.SPACE_NAME]
   end
 
-  function model.serialize(tuple, data)
-    local res = {
-      tx_id = tuple[model.TX_ID],
-      tx_time = tuple[model.TX_TIME],
-      tx_events = tuple[model.TX_EVENTS]
-    }
-
-    if validator.is_some(data) then
-      for k, v in pairs(data) do
-        res[k] = v
-      end
-    end
-
-    return res
-  end
 
 
 
