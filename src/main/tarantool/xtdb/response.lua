@@ -9,6 +9,7 @@ response.CREATED = 201
 
 -- error responses
 response.BAD_REQUEST = 400
+response.NOT_FOUND = 404
 
 
 
@@ -21,7 +22,8 @@ response.CODES = {
 
 
   -- error responses
-  [response.BAD_REQUEST] = 'Bad request'
+  [response.BAD_REQUEST] = 'Bad request',
+  [response.NOT_FOUND] = 'Not found'
 
 }
 
