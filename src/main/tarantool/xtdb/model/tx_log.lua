@@ -69,6 +69,14 @@ function tx_log.model(config)
     })
   end
 
+  function model.latest_submitted_tx()
+    local res
+    utils.try(function()
+      res = { [model.TX_ID] = box.sequence[model.TX_ID_INDEX_SEQ]:current() }
+    end)
+    return res
+  end
+
   return model
 
 end
