@@ -26,7 +26,7 @@ function db.configure(config)
       tx_log_space:format({
         { name = tx_log.TX_ID_FIELD, type = 'unsigned' },
         { name = tx_log.TX_TIME_FIELD, type = 'unsigned' },
-        { name = tx_log.TX_EVENTS_FIELD, type = 'string' } -- FIXME: change to binary
+        { name = tx_log.TX_EVENTS_FIELD, type = 'string' }
       })
 
       tx_log_space:create_index(tx_log.TX_ID_INDEX, {
