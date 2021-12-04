@@ -68,7 +68,7 @@ jobs:
           java-version: '17'
 
       - name: Setup clojure
-        uses: DeLaGuardo/setup-clojure@3.5
+        uses: DeLaGuardo/setup-clojure@3.6
         with:
           cli: latest
 
@@ -122,7 +122,7 @@ jobs:
           java-version: '17'
 
       - name: Setup clojure
-        uses: DeLaGuardo/setup-clojure@3.5
+        uses: DeLaGuardo/setup-clojure@3.6
         with:
           cli: latest
 
