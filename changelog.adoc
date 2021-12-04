@@ -1,1 +1,11 @@
 == Changelog
+
+=== Unreleased
+
+'''
+
+==== 0.1.56-SNAPSHOT (2021-12-04)
+
+- The first official release
+
+=== Released
