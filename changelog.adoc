@@ -1,11 +1,14 @@
 == Changelog
 
-=== Unreleased
+=== Released
 
 '''
 
-==== 0.1.56-SNAPSHOT (2021-12-04)
+==== 0.1.61 (2021-12-04)
 
-- The first official release
+*The first official release*
 
-=== Released
+===== Added
+
+- Tarantool configuration and client API 
+- Support XTDB tx-log API

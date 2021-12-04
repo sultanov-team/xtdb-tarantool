@@ -18,10 +18,10 @@ Add the following dependency in your project:
 [source,clojure]
 ----
 ;; project.clj or build.boot
-[team.sultanov/xtdb-tarantool "0.1.56-SNAPSHOT"]
+[team.sultanov/xtdb-tarantool "0.1.61"]
 
 ;; deps.edn
-team.sultanov/xtdb-tarantool {:mvn/version "0.1.56-SNAPSHOT"}
+team.sultanov/xtdb-tarantool {:mvn/version "0.1.61"}
 ----
 
 === Usage
