@@ -18,17 +18,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup openjdk
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Setup clojure
-        uses: DeLaGuardo/setup-clojure@3.5
-        with:
-          cli: latest
-
       - name: Setup babashka
         uses: just-sultanov/setup-babashka@v2
         with:
