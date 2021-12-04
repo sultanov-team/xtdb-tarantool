@@ -1,14 +1,17 @@
 {:paths   ["src/main/clojure" "src/main/resources"]
 
  :deps    {org.clojure/clojure           {:mvn/version "1.10.3"}
+           org.clojure/tools.logging     {:mvn/version "1.1.0"}
            com.xtdb/xtdb-core            {:mvn/version "1.20.0"}
            io.tarantool/cartridge-driver {:mvn/version "0.6.0"}}
 
  :aliases {:develop          {:extra-paths ["src/develop/clojure" "src/develop/resources"]
-                              :extra-deps  {nrepl/nrepl            {:mvn/version "0.8.3"}
-                                            hashp/hashp            {:mvn/version "0.2.1"}
-                                            integrant/repl         {:mvn/version "0.3.2"}
-                                            org.slf4j/slf4j-simple {:mvn/version "1.7.32"}}
+                              :extra-deps  {nrepl/nrepl               {:mvn/version "0.8.3"}
+                                            hashp/hashp               {:mvn/version "0.2.1"}
+                                            integrant/integrant       {:mvn/version "0.8.0"}
+                                            integrant/repl            {:mvn/version "0.3.2"}
+                                            org.slf4j/slf4j-simple    {:mvn/version "1.7.32"}
+                                            com.xtdb/xtdb-http-server {:mvn/version "1.20.0"}}
                               :main-opts   ["--main" "nrepl.cmdline"]}
 
            :test             {:extra-paths ["src/test/clojure" "src/test/resources"]
