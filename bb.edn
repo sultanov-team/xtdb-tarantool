@@ -126,7 +126,7 @@
                             (println "Skip deploy..."))}
 
   up               {:doc  "[xtdb-tarantool] Start development environment"
-                    :task (shell {:extra-env extra-env} "docker compose up -d")}
+                    :task (shell {:extra-env extra-env} "docker-compose up -d")}
 
   down             {:doc  "[xtdb-tarantool] Shutdown development environment"
-                    :task (shell {:extra-env extra-env} "docker compose down")}}}
+                    :task (shell {:extra-env extra-env} "docker-compose down")}}}

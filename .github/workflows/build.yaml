@@ -62,17 +62,6 @@ jobs:
   test:
     needs: lint
     runs-on: ubuntu-latest
-    services:
-      tarantool-node1:
-        image: tarantool/tarantool:2.8.2
-        env:
-          TARANTOOL_USER_NAME: root
-          TARANTOOL_USER_PASSWORD: root
-        options: --entrypoint tarantool /opt/tarantool/xtdb.lua
-        ports:
-          - "3301:3301"
-        volumes:
-          - "./src/main/tarantool:/opt/tarantool"
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -109,8 +98,14 @@ jobs:
             ~/.cpcache
           key: ${{ runner.os }}-${{ hashFiles('**/deps.edn') }}
 
+      - name: Start services
+        run: bb up
+
       - name: Run tests
         run: bb test
+
+      - name: Stop services
+        run: bb down
 
       - name: Upload coverage
         run: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN -f ./coverage/codecov.json
